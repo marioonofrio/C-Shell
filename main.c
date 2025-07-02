@@ -26,6 +26,83 @@ void signal_handling(int sig)
     }
 }
 
+void parse_line(char *line, char *commands[], int *num_commands)
+{
+    char *command = strtok(line, ";");
+    *num_commands = 0;
+    while (command != NULL)
+    {
+        commands[(*num_commands)++] = command;
+        command = strtok(NULL, ";");
+    }
+}
+
+void parse_command(char *command, char *args[], int *num_args)
+{
+    char *arg = strtok(command, " \t\n");
+    *num_args = 0;
+    while (arg != NULL)
+    {
+        args[(*num_args)++] = arg;
+        arg = strtok(NULL, " \t\n");
+    }
+    args[*num_args] = NULL;
+}
+
+int handle_cd_command(char *args[])
+{
+    if (args[1] == NULL)
+    {
+        char *home_dir = getenv("HOME");
+        if (home_dir == NULL)
+        {
+            fprintf(stderr, "cd: HOME environment variable not set\n");
+            return -1;
+        }
+        if (chdir(home_dir) != 0)
+        {
+            perror("cd");
+            return -1;
+        }
+    }
+    else
+    {
+        if (chdir(args[1]) != 0)
+        {
+            perror("cd");
+            return -1;
+        }
+    }
+    return 0;
+}
+
+void handle_path(char **args)
+{
+    if (args[1] == NULL)
+    {
+        printf("%s\n", getenv("PATH"));
+    }
+    else if (strcmp(args[1], "+") == 0 && args[2] != NULL)
+    {
+        strncat(path_buffer, ":", BUFFER_SIZE - strlen(path_buffer) - 1);
+        strncat(path_buffer, args[2], BUFFER_SIZE - strlen(path_buffer) - 1);
+        setenv("PATH", path_buffer, 1);
+    }
+    else if (strcmp(args[1], "-") == 0 && args[2] != NULL)
+    {
+        char *position = strstr(path_buffer, args[2]);
+        if (position == NULL)
+        {
+            memmove(position, position + strlenm(args[2]) + 1, strlen(position + strlen(args[2]) + 1) + 1);
+            setenv("PATH", path_buffer, 1);
+        }
+    }
+    else
+    {
+        fprintf(stderr, "Invalid path\n");
+    }
+}
+
 void handle_redirection(char *args[], int *input_fd, int *output_fd)
 {
     for (int i = 0; args[i] != NULL; i++)
