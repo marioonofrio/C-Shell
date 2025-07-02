@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <signal.h>
@@ -149,7 +150,7 @@ void handle_path(char **args)
         char *position = strstr(path_buffer, args[2]);
         if (position == NULL)
         {
-            memmove(position, position + strlenm(args[2]) + 1, strlen(position + strlen(args[2]) + 1) + 1);
+            memmove(position, position + strlen(args[2]) + 1, strlen(position + strlen(args[2]) + 1) + 1);
             setenv("PATH", path_buffer, 1);
         }
     }
