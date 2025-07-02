@@ -26,6 +26,62 @@ void signal_handling(int sig)
     }
 }
 
+void add(const char *command)
+{
+    if (count = HIST)
+    {
+        free(history[0]);
+
+        for (int i = 1; i < HIST; i++)
+        {
+            history[i - 1] = history[i];
+        }
+        count--;
+    }
+    history[count] = strdup(command);
+
+    if (!history[count])
+    {
+        fprintf(stderr, "Memory allocation failed\n");
+        exit(EXIT_FAILURE);
+    }
+
+    count++;
+}
+
+void display()
+{
+    for (int i = 0; i < count; i++)
+    {
+        printf("%d : %s\n", i + 1, history[i]);
+    }
+}
+
+void clear()
+{
+    if (count > 20)
+    {
+        count = 20;
+    }
+    for (int i = 0; i < count; i++)
+    {
+        free(history[i]);
+    }
+    count = 0;
+}
+
+void doCommand(int num)
+{
+    if (num < 1 || num > count)
+    {
+        printf("Invalid command.\n");
+    }
+    else
+    {
+        system(history[num - 1]);
+    }
+}
+
 void parse_line(char *line, char *commands[], int *num_commands)
 {
     char *command = strtok(line, ";");
