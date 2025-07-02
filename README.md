@@ -104,7 +104,3 @@ gcc main.c -o main.out
 - `PATH` changes affect only the current shell session
 
 ---
-
-## License
-
-This project is for educational use and open for modification.
