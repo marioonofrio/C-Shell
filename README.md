@@ -102,5 +102,3 @@ gcc main.c -o main.out
 - Command history stores up to 20 entries
 - Shell supports basic signal handling and piping but not background jobs
 - `PATH` changes affect only the current shell session
-
----
