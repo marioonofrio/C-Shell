@@ -2,7 +2,7 @@
 
 ## Overview
 
-**Newshell** is a lightweight Unix-style shell written in C that supports:
+**C-Shell** is a lightweight Unix-style shell written in C that supports:
 
 - Interactive and batch execution modes
 - Command history tracking and execution
